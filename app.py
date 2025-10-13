@@ -1,43 +1,56 @@
 import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
+import os
 
+dataframes = {}
 
-# --- Load Eurostat CSV ---
-with open("4_1_early_leavers.csv", encoding="utf-8") as f:
-    lines = f.readlines()
+# --- Load Eurostat CSV files ---
+for file in os.listdir("."):
+    if file.endswith(".csv"):
+        # Find header row
+        with open(file, encoding="utf-8") as f:
+            lines = f.readlines()
+        start_idx = next(i for i, line in enumerate(lines) if line.startswith("TIME;"))
 
-# Find where header row starts ("TIME;2004;2005;...")
-start_idx = next(i for i, line in enumerate(lines) if line.startswith("TIME;"))
+        # Load CSV
+        df = pd.read_csv(
+            file,
+            sep=";",
+            skiprows=start_idx,
+            na_values=[":", "bu", "b", "u"],
+        )
 
-# Load, using that line as header
-df = pd.read_csv(
-    "4_1_early_leavers.csv",
-    sep=";",
-    skiprows=start_idx,
-    na_values=[":", "bu", "b", "u"],  # flags treated as NaN
-)
+        # --- Transformations ---
+        # Rename columns (make sure "TIME" or "GEO (Labels)" exist)
+        rename_map = {}
+        if "TIME" in df.columns:
+            rename_map["TIME"] = "country"
+        if "GEO (Labels)" in df.columns:
+            rename_map["GEO (Labels)"] = "country"
+        df = df.rename(columns=rename_map)
 
-# Now first column = "TIME", second = "GEO (Labels)"
-df = df.rename(columns={"TIME": "country", "GEO (Labels)": "country"})
+        # Melt years into rows
+        df = df.melt(id_vars=["country"], var_name="year", value_name="value")
 
-# Melt years into rows
-df = df.melt(id_vars=["country"], var_name="year", value_name="value")
+        # Keep only numeric years
+        df = df[df["year"].str.isnumeric()]
+        df["year"] = df["year"].astype(int)
 
-# Keep only numeric years
-df = df[df["year"].str.isnumeric()]
-df["year"] = df["year"].astype(int)
+        # Fix decimal separator and convert to float
+        df["value"] = (
+            df["value"]
+            .astype(str)
+            .str.replace(",", ".", regex=False)
+            .apply(lambda x: pd.to_numeric(x, errors="coerce"))
+        )
 
-# Fix decimal separator and convert to float
-df["value"] = (
-    df["value"]
-    .astype(str)
-    .str.replace(",", ".", regex=False)
-    .apply(lambda x: pd.to_numeric(x, errors="coerce"))
-)
+        # Drop missing
+        df = df.dropna(subset=["value"])
 
-# Drop missing
-df = df.dropna(subset=["value"])
+        # Save to dictionary
+        dataframes[file] = df
+        print(f"Processed {file} → {df.shape[0]} rows")
 
 
 
