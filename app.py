@@ -1,95 +1,53 @@
-import pandas as pd
-import plotly.express as px
-from dash import Dash, dcc, html, Input, Output
-import os
+# app.py
+from dash import Dash, html, dcc
+import dash_bootstrap_components as dbc
+from data_loader import load_all_data
+from components import layout_home, gdp_map, gdp_trend
 
-dataframes = {}
+app = Dash(__name__, external_stylesheets=["https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"])
+server = app.server
 
-# --- Load Eurostat CSV files ---
-for file in os.listdir("."):
-    if file.endswith(".csv"):
-        # Find header row
-        with open(file, encoding="utf-8") as f:
-            lines = f.readlines()
-        start_idx = next(i for i, line in enumerate(lines) if line.startswith("TIME;"))
+dataframes = load_all_data("data")
 
-        # Load CSV
-        df = pd.read_csv(
-            file,
-            sep=";",
-            skiprows=start_idx,
-            na_values=[":", "bu", "b", "u"],
-        )
+# Education-related
+early_leavers_df = dataframes.get("4_1_early_leavers.csv")
+low_achieving_math_df = dataframes.get("4_2_2_low_achieving_math.csv")
+low_achieving_df = dataframes.get("4_2_low_achieving.csv")
+early_childhood_df = dataframes.get("4_3_early_childhood.csv")
+tertiary_educational_df = dataframes.get("4_4_tertiary_educational.csv")
+digital_skills_df = dataframes.get("4_5_digital_skills.csv")
+adult_learning_df = dataframes.get("4_6_adult_learning.csv")
 
-        # --- Transformations ---
-        # Rename columns (make sure "TIME" or "GEO (Labels)" exist)
-        rename_map = {}
-        if "TIME" in df.columns:
-            rename_map["TIME"] = "country"
-        if "GEO (Labels)" in df.columns:
-            rename_map["GEO (Labels)"] = "country"
-        df = df.rename(columns=rename_map)
+# Employment/economy-related
+employment_rate_df = dataframes.get("8_1_employment_rate.csv")
+risk_of_poverty_df = dataframes.get("8_2_risk_of_poverty.csv")
+investment_gdp_df = dataframes.get("8_3_investment_gdp.csv")
+long_term_unemployment_df = dataframes.get("8_4_long_term_unemployment.csv")
+outside_labour_df = dataframes.get("8_5_outside_labour.csv")
+real_gdp_df = dataframes.get("8_6_real_gdp.csv")
+neet_df = dataframes.get("8_7_neet.csv")
 
-        # Melt years into rows
-        df = df.melt(id_vars=["country"], var_name="year", value_name="value")
-
-        # Keep only numeric years
-        df = df[df["year"].str.isnumeric()]
-        df["year"] = df["year"].astype(int)
-
-        # Fix decimal separator and convert to float
-        df["value"] = (
-            df["value"]
-            .astype(str)
-            .str.replace(",", ".", regex=False)
-            .apply(lambda x: pd.to_numeric(x, errors="coerce"))
-        )
-
-        # Drop missing
-        df = df.dropna(subset=["value"])
-
-        # Save to dictionary
-        dataframes[file] = df
-        print(f"Processed {file} → {df.shape[0]} rows")
-
-
-
-# --- Create Dash app ---
-app = Dash(__name__)
-
-app.layout = html.Div([
-    html.H1("Early leavers from education and training, by citizenship"),
-    html.Label("Select Year:"),
-    dcc.Dropdown(
-        id="year-dropdown",
-        options=[{"label": str(y), "value": y} for y in sorted(df["year"].unique())],
-        value=df["year"].min(),
-        clearable=False
-    ),
-    dcc.Graph(
-        id="map",
-        style={"height": "800px", "width": "100%"}  
-    )
-])
-
-@app.callback(
-    Output("map", "figure"),
-    Input("year-dropdown", "value")
+home_component = layout_home.layout
+gdp_component = gdp_map.register_gdp_component(app, 
+    investment_df=investment_gdp_df,
+    real_df=real_gdp_df
 )
-def update_map(selected_year):
-    filtered = df[df["year"] == selected_year]
+gdp_trend_component = gdp_trend.gdp_trend_component(app, 
+    investment_df=investment_gdp_df,
+    real_df=real_gdp_df
+)
 
-    fig = px.choropleth(
-        filtered,
-        locations="country",
-        locationmode="country names",
-        color="value",
-        scope="europe",
-        color_continuous_scale="Viridis",
-        title=f"Early leavers from education/training ({selected_year})"
-    )
-    fig.update_geos(fitbounds="locations")
-    return fig
+app.layout = html.Div(
+    [
+    home_component,
+    gdp_component,
+    gdp_trend_component,
+    html.Footer("© 2025 EU Dashboard Project", className="text-center text-muted py-3")
+], style={"scrollBehavior": "smooth"})
+
+# Register callbacks
+#education_section.register_callbacks(app, education_df)
+#employment_section.register_callbacks(app, employment_df)
 
 if __name__ == "__main__":
     app.run(debug=True)
