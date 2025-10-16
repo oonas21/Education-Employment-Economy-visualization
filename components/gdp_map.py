@@ -15,9 +15,19 @@ def register_gdp_component(app, real_df, investment_df):
     # Layout with dropdown + two side-by-side maps
     layout = html.Div([
         html.H2("European GDP Comparison", className="text-2xl font-bold text-center mb-4"),
-        html.H3("Real GDP (GDP adjusted for inflation) measures the value of the total final output of goods and services produced by an economy within a certain period of time. " \
+        html.H3("Real GDP (GDP adjusted for inflation) measures the value of the total final output of goods and services produced by an economy within a certain period of time. \n" \
         "Investment share of GDP indicator measures the share of GDP that is used for investment activities in the government, business and household sectors. " \
-        "It's measured as percentage of real GDP of the capita.", className="text-lg font-bold text-center mb-4"),
+        "It's measured as percentage of real GDP of the capita.",
+            style={
+            "fontSize": "15px",
+            "fontWeight": "400",
+            "textAlign": "center",
+            "margin": "0 auto 1rem auto",
+            "marginBottom": "1rem",
+            "color": "#4B5563",
+            "maxWidth": "800px",  
+            "lineHeight": "1.6"  
+        }),
         
         dcc.Dropdown(
             id="gdp-year-dropdown",

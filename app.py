@@ -2,7 +2,7 @@
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 from data_loader import load_all_data
-from components import layout_home, gdp_map, gdp_trend
+from components import layout_home, gdp_map, gdp_trend, education_map, education_trend
 
 app = Dash(__name__, external_stylesheets=["https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"])
 server = app.server
@@ -37,17 +37,26 @@ gdp_trend_component = gdp_trend.gdp_trend_component(app,
     real_df=real_gdp_df
 )
 
+education_component = education_map.education_component(app,
+    early_childhood_df=early_childhood_df,
+    tertiary_df=tertiary_educational_df,
+    adult_df=adult_learning_df)
+
+education_trend_component = education_trend.education_trend_component(app,
+    early_childhood_df=early_childhood_df,
+    tertiary_df=tertiary_educational_df,
+    adult_df=adult_learning_df)
+
+
 app.layout = html.Div(
     [
     home_component,
     gdp_component,
     gdp_trend_component,
+    education_component,
+    education_trend_component,
     html.Footer("© 2025 EU Dashboard Project", className="text-center text-muted py-3")
 ], style={"scrollBehavior": "smooth"})
-
-# Register callbacks
-#education_section.register_callbacks(app, education_df)
-#employment_section.register_callbacks(app, employment_df)
 
 if __name__ == "__main__":
     app.run(debug=True)
