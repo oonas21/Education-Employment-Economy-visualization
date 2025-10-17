@@ -33,9 +33,9 @@ def education_component(app, early_childhood_df, tertiary_df, adult_df):
         ),
 
         html.Div([
-            dcc.Graph(id="early-childhood-map", style={"flex": "1"}),
-            dcc.Graph(id="tertiary-map", style={"flex": "1"}),
-            dcc.Graph(id="adulthood-map", style={"flex": "1"})
+            dcc.Graph(id="early-childhood-map", style={"flex": "1", "width": "350px"}),
+            dcc.Graph(id="tertiary-map", style={"flex": "1", "width": "350px"}),
+            dcc.Graph(id="adulthood-map", style={"flex": "1", "width": "350px"})
         ], style={
             "display": "flex",
             "gap": "1%",   # optional — reduce spacing

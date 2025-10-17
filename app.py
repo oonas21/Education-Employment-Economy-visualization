@@ -2,7 +2,7 @@
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 from data_loader import load_all_data
-from components import layout_home, gdp_map, gdp_trend, education_map, education_trend, employment_map
+from components import layout_home, gdp_map, gdp_trend, education_map, education_trend, employment_map, employment_trend, employment_vs_unemp
 
 app = Dash(__name__, external_stylesheets=["https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"])
 server = app.server
@@ -51,14 +51,22 @@ employment_map_component = employment_map.employment_map_component(app,
     emp_rate_df=employment_rate_df,
     long_term_unemp_df=long_term_unemployment_df)
 
+employment_trend_component = employment_trend.employment_trend_component(app, 
+    emp_rate_df=employment_rate_df,
+    long_term_unemp_df=long_term_unemployment_df)
+
+employ_vs_unemploy_component = employment_vs_unemp.employ_vs_unemploy(app, 
+    emp_rate_df=employment_rate_df,
+    long_term_unemp_df=long_term_unemployment_df)
+
 # --- Layout ---
 app.layout = html.Div(
     [
-        # Home Section (no background color)
+        # Home Section (always visible)
         html.Div(
             [home_component],
             style={
-                "backgroundColor": "#c08daa",  
+                "backgroundColor": "#e5b3e5",
                 "padding": "40px 60px",
                 "borderRadius": "16px",
                 "margin": "30px auto",
@@ -67,55 +75,86 @@ app.layout = html.Div(
             },
         ),
 
-
-        # GDP Section (light green)
+        # --- Accordion that hides all “basic” visualizations ---
         html.Div(
-            [gdp_component, gdp_trend_component],
-            style={
-                "backgroundColor": "#e6eef4",  
-                "padding": "40px 60px",
-                "borderRadius": "16px",
-                "margin": "30px auto",
-                "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                "maxWidth": "1400px"
-            },
-        ),
+            dbc.Accordion(
+                [
+                    dbc.AccordionItem(
+                        [
+                            # GDP Section
+                            html.Div(
+                                [gdp_component, gdp_trend_component],
+                                style={
+                                    "backgroundColor": "#e6eef4",
+                                    "padding": "40px 60px",
+                                    "borderRadius": "16px",
+                                    "margin": "30px auto",
+                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                                    "maxWidth": "1400px"
+                                },
+                            ),
 
-        # Education Section (light green)
-        html.Div(
-            [education_component, education_trend_component],
-            style={
-                "backgroundColor": "#e6eef4",
-                "padding": "40px 60px",
-                "borderRadius": "16px",
-                "margin": "30px auto",
-                "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                "maxWidth": "1400px"
-            },
-        ),
+                            # Education Section
+                            html.Div(
+                                [education_component, education_trend_component],
+                                style={
+                                    "backgroundColor": "#e6eef4",
+                                    "padding": "40px 60px",
+                                    "borderRadius": "16px",
+                                    "margin": "30px auto",
+                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                                    "maxWidth": "1400px"
+                                },
+                            ),
 
-        # Employment Section (light green)
-        html.Div(
-            [employment_map_component],
+                            # Employment Section
+                            html.Div(
+                                [employment_map_component, employment_trend_component, employ_vs_unemploy_component],
+                                style={
+                                    "backgroundColor": "#e6eef4",
+                                    "padding": "40px 60px",
+                                    "borderRadius": "16px",
+                                    "margin": "30px auto",
+                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                                    "maxWidth": "1400px"
+                                },
+                            ),
+                        ],
+                        title=html.H4(
+                            "Basic Indicators",
+                            style={
+                            "display": "flex",
+                            "justifyContent": "center",
+                            "alignItems": "center",
+                            "fontWeight": "600",
+                            "fontSize": "1.6rem",
+                            "width": "100%",
+                            "color": "#2c3e50"
+                        }),
+                    ),
+                ],
+                always_open=True,
+                start_collapsed=True,
+                className="my-4 w-100",
+            ),
             style={
-                "backgroundColor": "#e6eef4",
-                "padding": "40px 60px",
-                "borderRadius": "16px",
-                "margin": "30px auto",
-                "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                "maxWidth": "1400px"
-            },
+                "maxWidth": "1400px",  # control total width
+                "margin": "0 auto",    # center horizontally
+                "borderRadius": "12px",
+                "boxShadow": "0 4px 10px rgba(0,0,0,0.1)",
+            }
         ),
 
         # Footer
         html.Footer(
-            "© 2025 EU Dashboard Project",
+            "© 2025 EU Sustainability goals",
             className="text-center text-muted py-3",
             style={"marginTop": "40px"}
         ),
     ],
     style={"scrollBehavior": "smooth", "backgroundColor": "#f8f9fa"},
 )
+
 
 if __name__ == "__main__":
     app.run(debug=True)

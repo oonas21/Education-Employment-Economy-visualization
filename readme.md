@@ -5,4 +5,4 @@
 - Map -> can swith from GDP to investment GDP
 
 # Todo
-Muuta gdp trendeissä maiden järjestys, isoin gdp ylös ja pienin alas
+Korrelaatio employment ja long-term unemployment välillä

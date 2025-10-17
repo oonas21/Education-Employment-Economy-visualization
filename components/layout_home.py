@@ -1,6 +1,7 @@
 # components/layout_home.py
 from dash import html, dcc
 
+
 layout = html.Div(
     [
         html.H1(
@@ -14,7 +15,7 @@ layout = html.Div(
     ],
     className="d-flex flex-column justify-content-center align-items-center",
     style={
-        "height": "60vh",  # Makes the section take 60% of viewport height
+        "height": "40vh",  # Makes the section take 60% of viewport height
         "textAlign": "center",
         "padding": "2rem",
     },

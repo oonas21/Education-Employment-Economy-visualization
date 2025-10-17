@@ -3,15 +3,10 @@ import plotly.express as px
 from dash.dependencies import Input, Output
 from assets.country_colors import country_colors
 
-def gdp_trend_component(app, real_df, investment_df):
-    """
-    Creates a layout for GDP trend line plots under the maps.
-    Registers callbacks to update plots based on selected country.
-    Returns the layout Div.
-    """
+def employment_trend_component(app, emp_rate_df, long_term_unemp_df):
 
     # Get list of countries from both datasets
-    countries = sorted(list(set(real_df['country'].unique()) | set(investment_df['country'].unique())))
+    countries = sorted(list(set(emp_rate_df['country'].unique()) | set(long_term_unemp_df['country'].unique())))
     # Remove aggregated regions
     for agg in ["European Union - 27 countries (from 2020)",
                 "Euro area – 20 countries (from 2023)",
@@ -20,7 +15,7 @@ def gdp_trend_component(app, real_df, investment_df):
             countries.remove(agg)
 
     layout = html.Div([
-        html.H3("GDP Trends", 
+        html.H3("Employment and long-term unemployment trends", 
             style={
             "fontWeight": "400",          # light-medium weight (like before)
             "textAlign": "center",        # center align
@@ -29,7 +24,7 @@ def gdp_trend_component(app, real_df, investment_df):
             "lineHeight": "1.6",          # balanced vertical spacing
             "maxWidth": "800px",          # keeps it readable
         }),
-        html.H4("Comare GDP trends between different countries",
+        html.H4("Comare employment and long-term unemployment trends between different countries",
             style={
             "fontSize": "15px",
             "fontWeight": "400",
@@ -43,7 +38,7 @@ def gdp_trend_component(app, real_df, investment_df):
 
         # Single dropdown for both graphs
         dcc.Dropdown(
-            id="gdp-country-dropdown",
+            id="employment-country-dropdown",
             options=[{"label": c, "value": c} for c in countries],
             multi=True,
             value=["Finland"] if countries else None,
@@ -53,16 +48,16 @@ def gdp_trend_component(app, real_df, investment_df):
 
         # Graphs side by side (or stacked for smaller screens)
         html.Div([
-            dcc.Graph(id="real-gdp-trend", style={"flex": "1", "height": "500px"}),
-            dcc.Graph(id="investment-gdp-trend", style={"flex": "1", "height": "500px"})
+            dcc.Graph(id="employment-trend", style={"flex": "1", "height": "500px", "width": "800px"}),
+            dcc.Graph(id="unemployment-trend", style={"flex": "1", "height": "500px", "width": "800px"})
         ], style={"display": "flex", "gap": "2%", "flexWrap": "wrap"})
     ])
 
     # --- Single callback for both graphs ---
     @app.callback(
-        Output("real-gdp-trend", "figure"),
-        Output("investment-gdp-trend", "figure"),
-        Input("gdp-country-dropdown", "value")
+        Output("employment-trend", "figure"),
+        Output("unemployment-trend", "figure"),
+        Input("employment-country-dropdown", "value")
     )
     def update_gdp_trends(selected_countries):
         if not selected_countries:
@@ -73,33 +68,33 @@ def gdp_trend_component(app, real_df, investment_df):
             selected_countries = [selected_countries]
 
         # Filter real GDP
-        df_real = real_df[real_df['country'].isin(selected_countries)].sort_values("year")
-        fig_real = px.line(
-            df_real,
+        df_emloyment = emp_rate_df[emp_rate_df['country'].isin(selected_countries)].sort_values("year")
+        fig_employment = px.line(
+            df_emloyment,
             x="year",
             y="value",
             color="country",
             markers=True,
-            title="Real GDP Trend",
-            labels={"value": "GDP (€)", "year": "Year", "country": "Country"},
+            title="Employment rate trend",
+            labels={"value": "Employment rate (%)", "year": "Year", "country": "Country"},
             color_discrete_map=country_colors
         )
-        fig_real.update_layout(yaxis_title="GDP (€)")
+        fig_employment.update_layout(yaxis_title="Employment rate (%)")
 
         # Filter investment GDP
-        df_invest = investment_df[investment_df['country'].isin(selected_countries)].sort_values("year")
-        fig_invest = px.line(
-            df_invest,
+        df_unemployment = long_term_unemp_df[long_term_unemp_df['country'].isin(selected_countries)].sort_values("year")
+        fig_unemployment = px.line(
+            df_unemployment,
             x="year",
             y="value",
             color="country",
             markers=True,
-            title="Investment GDP Trend",
-            labels={"value": "Investment share (%)", "year": "Year", "country": "Country"},
+            title="Long-term unemployment rate trend",
+            labels={"value": "Long-term unemployment rate (%)", "year": "Year", "country": "Country"},
             color_discrete_map=country_colors
         )
-        fig_invest.update_layout(yaxis_title="Investment GDP (%)")
+        fig_unemployment.update_layout(yaxis_title="Investment GDP (%)")
 
-        return fig_real, fig_invest
+        return fig_employment, fig_unemployment
 
     return layout

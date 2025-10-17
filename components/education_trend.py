@@ -2,6 +2,7 @@ from dash import html, dcc
 import pandas as pd
 import plotly.express as px
 from dash.dependencies import Input, Output
+from assets.country_colors import country_colors
 
 def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
 
@@ -92,7 +93,8 @@ def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
             markers=True,
             title="Education Indicators Over Time",
             labels={"value": "Percentage (%)", "year": "Year", "country": "Country"},
-            category_orders={"indicator": ["Early childhood", "Tertiary", "Adult learning"]}  
+            category_orders={"indicator": ["Early childhood", "Tertiary", "Adult learning"]} ,
+            color_discrete_map=country_colors
         )
 
         # --- Add dashed mean lines manually ---
