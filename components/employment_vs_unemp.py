@@ -41,7 +41,7 @@ def employ_vs_unemploy(app, emp_rate_df, long_term_unemp_df):
         }),
 
         dcc.Dropdown(
-            id="employment-year-dropdown",
+            id="employment-corr-year-dropdown",
             options=[{"label": str(y), "value": y} for y in sorted(common_years, reverse=True)],
             value=common_years[-1] if common_years else None,
             clearable=False,
@@ -56,7 +56,7 @@ def employ_vs_unemploy(app, emp_rate_df, long_term_unemp_df):
         # --- Single callback for both graphs ---
     @app.callback(
         Output("employment-correlation", "figure"),
-        Input("employment-year-dropdown", "value")
+        Input("employment-corr-year-dropdown", "value")
     )
     def update_scatter(selected_year):
         if selected_year is None:

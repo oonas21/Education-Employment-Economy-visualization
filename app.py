@@ -75,62 +75,87 @@ app.layout = html.Div(
             },
         ),
 
-        # --- Accordion that hides all “basic” visualizations ---
+        # --- Accordion for all “basic” visualizations ---
         html.Div(
             dbc.Accordion(
                 [
+                    # Outer Accordion Item
                     dbc.AccordionItem(
                         [
-                            # GDP Section
-                            html.Div(
-                                [gdp_component, gdp_trend_component],
-                                style={
-                                    "backgroundColor": "#e6eef4",
-                                    "padding": "40px 60px",
-                                    "borderRadius": "16px",
-                                    "margin": "30px auto",
-                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                                    "maxWidth": "1400px"
-                                },
-                            ),
+                            # Inner Accordion for subcategories
+                            dbc.Accordion(
+                                [
+                                    # GDP Sub-Accordion
+                                    dbc.AccordionItem(
+                                        [
+                                            html.Div(
+                                                [gdp_component, gdp_trend_component],
+                                                style={
+                                                    "backgroundColor": "#e6eef4",
+                                                    "padding": "40px 60px",
+                                                    "borderRadius": "16px",
+                                                    "margin": "30px auto",
+                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                                                    "maxWidth": "1400px"
+                                                },
+                                            ),
+                                        ],
+                                        title="💶 GDP Indicators",
+                                    ),
 
-                            # Education Section
-                            html.Div(
-                                [education_component, education_trend_component],
-                                style={
-                                    "backgroundColor": "#e6eef4",
-                                    "padding": "40px 60px",
-                                    "borderRadius": "16px",
-                                    "margin": "30px auto",
-                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                                    "maxWidth": "1400px"
-                                },
-                            ),
+                                    # Education Sub-Accordion
+                                    dbc.AccordionItem(
+                                        [
+                                            html.Div(
+                                                [education_component, education_trend_component],
+                                                style={
+                                                    "backgroundColor": "#e6eef4",
+                                                    "padding": "40px 60px",
+                                                    "borderRadius": "16px",
+                                                    "margin": "30px auto",
+                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                                                    "maxWidth": "1400px"
+                                                },
+                                            ),
+                                        ],
+                                        title="🎓 Education Indicators",
+                                    ),
 
-                            # Employment Section
-                            html.Div(
-                                [employment_map_component, employment_trend_component, employ_vs_unemploy_component],
-                                style={
-                                    "backgroundColor": "#e6eef4",
-                                    "padding": "40px 60px",
-                                    "borderRadius": "16px",
-                                    "margin": "30px auto",
-                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                                    "maxWidth": "1400px"
-                                },
-                            ),
+                                    # Employment Sub-Accordion
+                                    dbc.AccordionItem(
+                                        [
+                                            html.Div(
+                                                [employment_map_component, employment_trend_component, employ_vs_unemploy_component],
+                                                style={
+                                                    "backgroundColor": "#e6eef4",
+                                                    "padding": "40px 60px",
+                                                    "borderRadius": "16px",
+                                                    "margin": "30px auto",
+                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                                                    "maxWidth": "1400px"
+                                                },
+                                            ),
+                                        ],
+                                        title="💼 Employment Indicators",
+                                    ),
+                                ],
+                                always_open=True,
+                                start_collapsed=True,
+                            )
                         ],
                         title=html.H4(
-                            "Basic Indicators",
+                            "📊 Basic Indicators",
                             style={
-                            "display": "flex",
-                            "justifyContent": "center",
-                            "alignItems": "center",
-                            "fontWeight": "600",
-                            "fontSize": "1.6rem",
-                            "width": "100%",
-                            "color": "#2c3e50"
-                        }),
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "alignItems": "center",
+                                "fontWeight": "600",
+                                "fontSize": "1.6rem",
+                                "width": "100%",
+                                "color": "#2c3e50",
+                                "margin": "0 auto"
+                            },
+                        ),
                     ),
                 ],
                 always_open=True,
@@ -138,16 +163,16 @@ app.layout = html.Div(
                 className="my-4 w-100",
             ),
             style={
-                "maxWidth": "1400px",  # control total width
-                "margin": "0 auto",    # center horizontally
+                "maxWidth": "1400px",
+                "margin": "0 auto",
                 "borderRadius": "12px",
                 "boxShadow": "0 4px 10px rgba(0,0,0,0.1)",
-            }
+            },
         ),
 
         # Footer
         html.Footer(
-            "© 2025 EU Sustainability goals",
+            "© 2025 EU Sustainability Goals",
             className="text-center text-muted py-3",
             style={"marginTop": "40px"}
         ),
@@ -156,5 +181,8 @@ app.layout = html.Div(
 )
 
 
+
 if __name__ == "__main__":
     app.run(debug=True)
+
+

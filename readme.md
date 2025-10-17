@@ -5,4 +5,5 @@
 - Map -> can swith from GDP to investment GDP
 
 # Todo
-Korrelaatio employment ja long-term unemployment välillä
+- Pie diagrammi verailuun GDP
+- education vertailuun tikku-ukot, valinta on maat
