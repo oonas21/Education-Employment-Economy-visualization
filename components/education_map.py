@@ -36,7 +36,11 @@ def education_component(app, early_childhood_df, tertiary_df, adult_df):
             dcc.Graph(id="early-childhood-map", style={"flex": "1"}),
             dcc.Graph(id="tertiary-map", style={"flex": "1"}),
             dcc.Graph(id="adulthood-map", style={"flex": "1"})
-        ], style={"display": "flex", "gap": "2%"})
+        ], style={
+            "display": "flex",
+            "gap": "1%",   # optional — reduce spacing
+            "width": "100%",
+        })
     ], className="my-8")
 
     # --- Callback to update maps ---
@@ -66,6 +70,12 @@ def education_component(app, early_childhood_df, tertiary_df, adult_df):
             title=f"Participation in early childhood education (%)"
         )
         fig_childhood.update_geos(fitbounds="locations")
+        fig_childhood.update_layout(
+            coloraxis_colorbar=dict(
+                thickness=10,
+                len=1
+            )
+        )
 
         # Tertiary map
         fig_tertiary = px.choropleth(
@@ -75,9 +85,15 @@ def education_component(app, early_childhood_df, tertiary_df, adult_df):
             color="value",
             scope="europe",
             color_continuous_scale="Plasma",
-            title=f"Persons aged 25-34 with tertiary educational attainment level"
+            title=f"Persons aged 25-34 with tertiary education (%)"
         )
         fig_tertiary.update_geos(fitbounds="locations")
+        fig_tertiary.update_layout(
+            coloraxis_colorbar=dict(
+                thickness=10,
+                len=1
+            )
+        )
 
         # Adulthood map
         fig_adulthood = px.choropleth(
@@ -87,9 +103,15 @@ def education_component(app, early_childhood_df, tertiary_df, adult_df):
             color="value",
             scope="europe",
             color_continuous_scale="Plasma",
-            title=f"Adult participation in learning"
+            title=f"Adult participation in learning (%)"
         )
-        fig_tertiary.update_geos(fitbounds="locations")
+        fig_adulthood.update_geos(fitbounds="locations")
+        fig_adulthood.update_layout(
+            coloraxis_colorbar=dict(
+                thickness=10,
+                len=1
+            )
+        )
 
         return  fig_childhood, fig_tertiary, fig_adulthood
 

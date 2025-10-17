@@ -25,7 +25,15 @@ def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
 
 
     layout = html.Div([
-        html.H3("Education Trends", className="text-lg font-bold text-center mt-6"),
+        html.H3("Education Trends", 
+            style={
+            "fontWeight": "400",          # light-medium weight (like before)
+            "textAlign": "center",        # center align
+            "margin": "2.5rem auto 1.5rem auto",  # more space on top (≈mt-6)
+            "fontSize": "1.5rem",         # same visual size as text-lg / ~24px
+            "lineHeight": "1.6",          # balanced vertical spacing
+            "maxWidth": "800px",          # keeps it readable
+        }),
 
         # Single dropdown for both graphs
         dcc.Dropdown(

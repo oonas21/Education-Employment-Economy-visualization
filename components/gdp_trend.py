@@ -19,7 +19,26 @@ def gdp_trend_component(app, real_df, investment_df):
             countries.remove(agg)
 
     layout = html.Div([
-        html.H3("GDP Trends", className="text-lg font-bold text-center mt-6"),
+        html.H3("GDP Trends", 
+            style={
+            "fontWeight": "400",          # light-medium weight (like before)
+            "textAlign": "center",        # center align
+            "margin": "2.5rem auto 1.5rem auto",  # more space on top (≈mt-6)
+            "fontSize": "1.5rem",         # same visual size as text-lg / ~24px
+            "lineHeight": "1.6",          # balanced vertical spacing
+            "maxWidth": "800px",          # keeps it readable
+        }),
+        html.H4("Comare GDP trends between different countries",
+            style={
+            "fontSize": "15px",
+            "fontWeight": "400",
+            "textAlign": "center",
+            "margin": "0 auto 1rem auto",
+            "marginBottom": "1rem",
+            "color": "#4B5563",
+            "maxWidth": "800px",  
+            "lineHeight": "1.6"  
+        }),
 
         # Single dropdown for both graphs
         dcc.Dropdown(

@@ -2,7 +2,7 @@
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 from data_loader import load_all_data
-from components import layout_home, gdp_map, gdp_trend, education_map, education_trend
+from components import layout_home, gdp_map, gdp_trend, education_map, education_trend, employment_map
 
 app = Dash(__name__, external_stylesheets=["https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"])
 server = app.server
@@ -47,16 +47,75 @@ education_trend_component = education_trend.education_trend_component(app,
     tertiary_df=tertiary_educational_df,
     adult_df=adult_learning_df)
 
+employment_map_component = employment_map.employment_map_component(app, 
+    emp_rate_df=employment_rate_df,
+    long_term_unemp_df=long_term_unemployment_df)
 
+# --- Layout ---
 app.layout = html.Div(
     [
-    home_component,
-    gdp_component,
-    gdp_trend_component,
-    education_component,
-    education_trend_component,
-    html.Footer("© 2025 EU Dashboard Project", className="text-center text-muted py-3")
-], style={"scrollBehavior": "smooth"})
+        # Home Section (no background color)
+        html.Div(
+            [home_component],
+            style={
+                "backgroundColor": "#c08daa",  
+                "padding": "40px 60px",
+                "borderRadius": "16px",
+                "margin": "30px auto",
+                "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                "maxWidth": "1400px"
+            },
+        ),
+
+
+        # GDP Section (light green)
+        html.Div(
+            [gdp_component, gdp_trend_component],
+            style={
+                "backgroundColor": "#e6eef4",  
+                "padding": "40px 60px",
+                "borderRadius": "16px",
+                "margin": "30px auto",
+                "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                "maxWidth": "1400px"
+            },
+        ),
+
+        # Education Section (light green)
+        html.Div(
+            [education_component, education_trend_component],
+            style={
+                "backgroundColor": "#e6eef4",
+                "padding": "40px 60px",
+                "borderRadius": "16px",
+                "margin": "30px auto",
+                "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                "maxWidth": "1400px"
+            },
+        ),
+
+        # Employment Section (light green)
+        html.Div(
+            [employment_map_component],
+            style={
+                "backgroundColor": "#e6eef4",
+                "padding": "40px 60px",
+                "borderRadius": "16px",
+                "margin": "30px auto",
+                "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                "maxWidth": "1400px"
+            },
+        ),
+
+        # Footer
+        html.Footer(
+            "© 2025 EU Dashboard Project",
+            className="text-center text-muted py-3",
+            style={"marginTop": "40px"}
+        ),
+    ],
+    style={"scrollBehavior": "smooth", "backgroundColor": "#f8f9fa"},
+)
 
 if __name__ == "__main__":
     app.run(debug=True)
