@@ -141,8 +141,7 @@ def gdp_money_component(app, real_df, investment_df):
                 icons.append(
                     html.Span(
                         "💰",  # GDP icon
-                        className="money-emoji" if not is_bright else "money-emoji money-bright",
-                        style={"fontSize": "32px", "margin": "2px"}  # larger emoji
+                        className="money-emoji" if not is_bright else "money-emoji money-bright"
                     )
                 )
 
