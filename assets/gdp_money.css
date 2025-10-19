@@ -1,0 +1,27 @@
+.money-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* 10 equal columns */
+  grid-auto-rows: 35px;                   /* row height */
+  justify-items: center;                  /* center each emoji horizontally */
+  align-items: center;                    /* center vertically */
+  gap: 2px;                               /* spacing between emojis */
+  width: 450px;                            /* total box width */
+  height: auto;                            /* let height expand based on number of rows */
+  padding: 0.5rem;                         /* optional small padding */
+  background-color: #f9fafb;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.money-emoji {
+  font-size: 28px;
+  line-height: 1;
+  width: 100%;         /* take full width of grid cell */
+  text-align: center;  /* center emoji in cell */
+}
+
+.money-bright {
+  filter: brightness(1.8);
+}

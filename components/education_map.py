@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output
 
 def education_component(app, early_childhood_df, tertiary_df, adult_df):
     # Find common years
-    common_years = sorted(list(set(early_childhood_df['year'].unique()) & set(tertiary_df['year'].unique()) & set(adult_df['year'].unique())))
+    common_years = sorted(list(set(early_childhood_df['year'].unique()) | set(tertiary_df['year'].unique()) | set(adult_df['year'].unique())))
 
     # Layout with dropdown + two side-by-side maps
     layout = html.Div([

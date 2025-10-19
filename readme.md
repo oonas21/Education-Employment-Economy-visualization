@@ -2,7 +2,7 @@
 
 1. Download the files
 
-2. Run 
+2. Run in the root of the project
 
 ```
 python app.py
@@ -18,6 +18,4 @@ python app.py
 - Map -> can swith from GDP to investment GDP
 
 # Todo
-- GDP: rahapino
-- Pie diagrammi verailuun GDP
-- education vertailuun tikku-ukot, valinta on maat
+- GDP: rahapinon asettelu?

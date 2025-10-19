@@ -2,7 +2,7 @@
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 from data_loader import load_all_data
-from components import layout_home, gdp_map, gdp_trend, education_map, education_trend, employment_map, employment_trend, employment_vs_unemp
+from components import layout_home, gdp_map, gdp_trend, education_map, education_trend, employment_map, employment_trend, employment_vs_unemp, gdp_money, education_people
 
 app = Dash(__name__, external_stylesheets=["https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"])
 server = app.server
@@ -37,6 +37,11 @@ gdp_trend_component = gdp_trend.gdp_trend_component(app,
     real_df=real_gdp_df
 )
 
+gdp_money_component = gdp_money.gdp_money_component(app, 
+    investment_df=investment_gdp_df,
+    real_df=real_gdp_df
+)
+
 education_component = education_map.education_component(app,
     early_childhood_df=early_childhood_df,
     tertiary_df=tertiary_educational_df,
@@ -46,6 +51,12 @@ education_trend_component = education_trend.education_trend_component(app,
     early_childhood_df=early_childhood_df,
     tertiary_df=tertiary_educational_df,
     adult_df=adult_learning_df)
+
+education_people_component = education_people.education_people_component(app,
+    early_childhood_df=early_childhood_df,
+    tertiary_df=tertiary_educational_df,
+    adult_df=adult_learning_df)
+
 
 employment_map_component = employment_map.employment_map_component(app, 
     emp_rate_df=employment_rate_df,
@@ -89,7 +100,7 @@ app.layout = html.Div(
                                     dbc.AccordionItem(
                                         [
                                             html.Div(
-                                                [gdp_component, gdp_trend_component],
+                                                [gdp_component, gdp_trend_component, gdp_money_component],
                                                 style={
                                                     "backgroundColor": "#e6eef4",
                                                     "padding": "40px 60px",
@@ -107,7 +118,7 @@ app.layout = html.Div(
                                     dbc.AccordionItem(
                                         [
                                             html.Div(
-                                                [education_component, education_trend_component],
+                                                [education_component, education_trend_component, education_people_component],
                                                 style={
                                                     "backgroundColor": "#e6eef4",
                                                     "padding": "40px 60px",

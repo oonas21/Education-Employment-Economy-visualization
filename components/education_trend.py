@@ -94,7 +94,11 @@ def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
             title="Education Indicators Over Time",
             labels={"value": "Percentage (%)", "year": "Year", "country": "Country"},
             category_orders={"indicator": ["Early childhood", "Tertiary", "Adult learning"]} ,
-            color_discrete_map=country_colors
+            color_discrete_map={
+                "Early childhood": "#1f77b4",
+                "Tertiary": "#ff7f0e",
+                "Adult learning": "#2ca02c"
+            }
         )
 
         # --- Add dashed mean lines manually ---

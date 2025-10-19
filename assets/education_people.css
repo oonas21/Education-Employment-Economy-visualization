@@ -1,0 +1,46 @@
+.edu-country-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+  width: 450px;
+  background-color: #f9fafb;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.edu-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #374151;
+  margin-bottom: 0.3rem;
+}
+
+.edu-icon-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.edu-person {
+  font-size: 28px;
+  margin: 2px;
+}
+
+.edu-level-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.edu-no-data {
+  font-size: 18px;
+  color: #6b7280;
+  text-align: center;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 350px;
+  background-color: #f9fafb;
+}
