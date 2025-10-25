@@ -2,7 +2,7 @@
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 from data_loader import load_all_data
-from components import layout_home, gdp_map, gdp_trend, education_map, education_trend, employment_map, employment_trend, employment_vs_unemp, gdp_money, education_people, employment_education_correlation, education_economy_correlation
+from components import layout_home, gdp_map, gdp_trend, education_map, education_trend, employment_map, employment_trend, employment_vs_unemp, gdp_money, education_people, employment_education_correlation, education_economy_correlation, employment_economy_correlation
 
 app = Dash(__name__, external_stylesheets=["https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"])
 server = app.server
@@ -81,6 +81,12 @@ economy_education_corr = education_economy_correlation.economy_education_correla
     early_childhood_df=early_childhood_df,
     tertiary_df=tertiary_educational_df,
     adult_df=adult_learning_df,
+    real_df=real_gdp_df,
+    investment_df=investment_gdp_df)
+
+economy_employment_corr = employment_economy_correlation.economy_employment_correlation(app,
+    emp_rate_df=employment_rate_df,
+    long_term_unemp_df=long_term_unemployment_df,
     real_df=real_gdp_df,
     investment_df=investment_gdp_df)
 
@@ -227,7 +233,7 @@ app.layout = html.Div(
                                     dbc.AccordionItem(
                                         [
                                             html.Div(
-                                                [],
+                                                [economy_employment_corr],
                                                 style={
                                                     "backgroundColor": "#e6eef4",
                                                     "padding": "40px 60px",
