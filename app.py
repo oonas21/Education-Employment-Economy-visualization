@@ -2,7 +2,7 @@
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 from data_loader import load_all_data
-from components import layout_home, gdp_map, gdp_trend, education_map, education_trend, employment_map, employment_trend, employment_vs_unemp, gdp_money, education_people
+from components import layout_home, gdp_map, gdp_trend, education_map, education_trend, employment_map, employment_trend, employment_vs_unemp, gdp_money, education_people, employment_education_correlation, education_economy_correlation
 
 app = Dash(__name__, external_stylesheets=["https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"])
 server = app.server
@@ -69,6 +69,20 @@ employment_trend_component = employment_trend.employment_trend_component(app,
 employ_vs_unemploy_component = employment_vs_unemp.employ_vs_unemploy(app, 
     emp_rate_df=employment_rate_df,
     long_term_unemp_df=long_term_unemployment_df)
+
+employment_education_corr = employment_education_correlation.employment_education_correlation(app,
+    early_childhood_df=early_childhood_df,
+    tertiary_df=tertiary_educational_df,
+    adult_df=adult_learning_df,
+    emp_rate_df=employment_rate_df,
+    long_term_unemp_df=long_term_unemployment_df)
+
+economy_education_corr = education_economy_correlation.economy_education_correlation(app,
+    early_childhood_df=early_childhood_df,
+    tertiary_df=tertiary_educational_df,
+    adult_df=adult_learning_df,
+    real_df=real_gdp_df,
+    investment_df=investment_gdp_df)
 
 # --- Layout ---
 app.layout = html.Div(
@@ -167,6 +181,101 @@ app.layout = html.Div(
                                 "margin": "0 auto"
                             },
                         ),
+                    ),
+                    dbc.AccordionItem(
+                       [
+                            # Inner Accordion for subcategories
+                            dbc.Accordion(
+                                [
+                                    # education - employment
+                                    dbc.AccordionItem(
+                                        [
+                                            html.Div(
+                                                [employment_education_corr],
+                                                style={
+                                                    "backgroundColor": "#e6eef4",
+                                                    "padding": "40px 60px",
+                                                    "borderRadius": "16px",
+                                                    "margin": "30px auto",
+                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                                                    "maxWidth": "1400px"
+                                                },
+                                            ),
+                                        ],
+                                        title="Connections between education on employment",
+                                    ),
+
+                                    # education - economy
+                                    dbc.AccordionItem(
+                                        [
+                                            html.Div(
+                                                [economy_education_corr],
+                                                style={
+                                                    "backgroundColor": "#e6eef4",
+                                                    "padding": "40px 60px",
+                                                    "borderRadius": "16px",
+                                                    "margin": "30px auto",
+                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                                                    "maxWidth": "1400px"
+                                                },
+                                            ),
+                                        ],
+                                        title="Effects of education to economy",
+                                    ),
+
+                                    # employment - economy
+                                    dbc.AccordionItem(
+                                        [
+                                            html.Div(
+                                                [],
+                                                style={
+                                                    "backgroundColor": "#e6eef4",
+                                                    "padding": "40px 60px",
+                                                    "borderRadius": "16px",
+                                                    "margin": "30px auto",
+                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                                                    "maxWidth": "1400px"
+                                                },
+                                            ),
+                                        ],
+                                        title="Effects of employment rates to economy",
+                                    ),
+                                    # summary
+                                    dbc.AccordionItem(
+                                        [
+                                            html.Div(
+                                                [],
+                                                style={
+                                                    "backgroundColor": "#e6eef4",
+                                                    "padding": "40px 60px",
+                                                    "borderRadius": "16px",
+                                                    "margin": "30px auto",
+                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
+                                                    "maxWidth": "1400px"
+                                                },
+                                            ),
+                                        ],
+                                        title="Summary of the effects",
+                                    ),
+                                ],
+                                always_open=True,
+                                start_collapsed=True,
+                            )
+                        ],
+                        title=html.H4(
+                            "Effects of education and employment rates on economy",
+                            style={
+                                "display": "flex",
+                                "justifyContent": "center",
+                                "alignItems": "center",
+                                "fontWeight": "600",
+                                "fontSize": "1.6rem",
+                                "width": "100%",
+                                "color": "#2c3e50",
+                                "margin": "0 auto"
+                            },
+                        ),
+
                     ),
                 ],
                 always_open=True,

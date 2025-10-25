@@ -9,13 +9,13 @@ layout = html.Div(
             className="display-4 fw-bold text-center mb-3",
         ),
         html.P(
-            "Explore how quality education affects decent work and economic growth via Verca.",
+            "Explore effects of quality education and employment rates to economic growth.",
             className="lead text-center text-muted",
         ),
     ],
     className="d-flex flex-column justify-content-center align-items-center",
     style={
-        "height": "40vh",  # Makes the section take 60% of viewport height
+        "height": "30vh",  # Makes the section take 60% of viewport height
         "textAlign": "center",
         "padding": "2rem",
     },
