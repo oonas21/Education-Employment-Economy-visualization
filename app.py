@@ -91,219 +91,132 @@ economy_employment_corr = employment_economy_correlation.economy_employment_corr
     investment_df=investment_gdp_df)
 
 # --- Layout ---
+# --- Layout ---
 app.layout = html.Div(
     [
-        # Home Section (always visible)
+        # Home Section
         html.Div(
-            [home_component],
+            home_component,
             style={
                 "backgroundColor": "#e5b3e5",
-                "padding": "40px 60px",
-                "borderRadius": "16px",
-                "margin": "30px auto",
-                "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                "maxWidth": "1400px"
+                "padding": "50px 70px",
+                "borderRadius": "18px",
+                "margin": "40px auto 20px auto",
+                "boxShadow": "0 6px 16px rgba(0, 0, 0, 0.1)",
+                "maxWidth": "1200px",
             },
         ),
 
-        # --- Accordion for all “basic” visualizations ---
+        # --- Two Main Sections ---
         html.Div(
-            dbc.Accordion(
-                [
-                    # Outer Accordion Item
-                    dbc.AccordionItem(
-                        [
-                            # Inner Accordion for subcategories
-                            dbc.Accordion(
-                                [
-                                    # GDP Sub-Accordion
-                                    dbc.AccordionItem(
-                                        [
-                                            html.Div(
-                                                [gdp_component, gdp_trend_component, gdp_money_component],
-                                                style={
-                                                    "backgroundColor": "#e6eef4",
-                                                    "padding": "40px 60px",
-                                                    "borderRadius": "16px",
-                                                    "margin": "30px auto",
-                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                                                    "maxWidth": "1400px"
-                                                },
-                                            ),
-                                        ],
-                                        title="💶 GDP Indicators",
-                                    ),
-
-                                    # Education Sub-Accordion
-                                    dbc.AccordionItem(
-                                        [
-                                            html.Div(
-                                                [education_component, education_trend_component, education_people_component],
-                                                style={
-                                                    "backgroundColor": "#e6eef4",
-                                                    "padding": "40px 60px",
-                                                    "borderRadius": "16px",
-                                                    "margin": "30px auto",
-                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                                                    "maxWidth": "1400px"
-                                                },
-                                            ),
-                                        ],
-                                        title="🎓 Education Indicators",
-                                    ),
-
-                                    # Employment Sub-Accordion
-                                    dbc.AccordionItem(
-                                        [
-                                            html.Div(
-                                                [employment_map_component, employment_trend_component, employ_vs_unemploy_component],
-                                                style={
-                                                    "backgroundColor": "#e6eef4",
-                                                    "padding": "40px 60px",
-                                                    "borderRadius": "16px",
-                                                    "margin": "30px auto",
-                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                                                    "maxWidth": "1400px"
-                                                },
-                                            ),
-                                        ],
-                                        title="💼 Employment Indicators",
-                                    ),
-                                ],
-                                always_open=True,
-                                start_collapsed=True,
-                            )
-                        ],
-                        title=html.H4(
+            [
+                # Section 1: Basic Indicators
+                html.Div(
+                    [
+                        html.H3(
                             "📊 Basic Indicators",
                             style={
-                                "display": "flex",
-                                "justifyContent": "center",
-                                "alignItems": "center",
-                                "fontWeight": "600",
-                                "fontSize": "1.6rem",
-                                "width": "100%",
+                                "textAlign": "center",
                                 "color": "#2c3e50",
-                                "margin": "0 auto"
+                                "marginBottom": "25px",
+                                "fontWeight": "600",
                             },
                         ),
-                    ),
-                    dbc.AccordionItem(
-                       [
-                            # Inner Accordion for subcategories
-                            dbc.Accordion(
-                                [
-                                    # education - employment
-                                    dbc.AccordionItem(
-                                        [
-                                            html.Div(
-                                                [employment_education_corr],
-                                                style={
-                                                    "backgroundColor": "#e6eef4",
-                                                    "padding": "40px 60px",
-                                                    "borderRadius": "16px",
-                                                    "margin": "30px auto",
-                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                                                    "maxWidth": "1400px"
-                                                },
-                                            ),
-                                        ],
-                                        title="Connections between education on employment",
+                        dbc.Tabs(
+                            [
+                                dbc.Tab(
+                                    html.Div(
+                                        [gdp_component, gdp_trend_component, gdp_money_component],
+                                        style={"padding": "25px"},
                                     ),
+                                    label="💶 GDP",
+                                ),
+                                dbc.Tab(
+                                    html.Div(
+                                        [education_component, education_trend_component, education_people_component],
+                                        style={"padding": "25px"},
+                                    ),
+                                    label="🎓 Education",
+                                ),
+                                dbc.Tab(
+                                    html.Div(
+                                        [employment_map_component, employment_trend_component, employ_vs_unemploy_component],
+                                        style={"padding": "25px"},
+                                    ),
+                                    label="💼 Employment",
+                                ),
+                            ],
+                            id="tabs-basic",
+                            active_tab="tab-0",
+                            className="mb-3",
+                        ),
+                    ],
+                    style={
+                        "backgroundColor": "#f2f5f9",
+                        "padding": "40px 60px",
+                        "borderRadius": "18px",
+                        "margin": "20px auto",
+                        "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.1)",
+                        "maxWidth": "1200px",
+                    },
+                ),
 
-                                    # education - economy
-                                    dbc.AccordionItem(
-                                        [
-                                            html.Div(
-                                                [economy_education_corr],
-                                                style={
-                                                    "backgroundColor": "#e6eef4",
-                                                    "padding": "40px 60px",
-                                                    "borderRadius": "16px",
-                                                    "margin": "30px auto",
-                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                                                    "maxWidth": "1400px"
-                                                },
-                                            ),
-                                        ],
-                                        title="Effects of education to economy",
-                                    ),
-
-                                    # employment - economy
-                                    dbc.AccordionItem(
-                                        [
-                                            html.Div(
-                                                [economy_employment_corr],
-                                                style={
-                                                    "backgroundColor": "#e6eef4",
-                                                    "padding": "40px 60px",
-                                                    "borderRadius": "16px",
-                                                    "margin": "30px auto",
-                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                                                    "maxWidth": "1400px"
-                                                },
-                                            ),
-                                        ],
-                                        title="Effects of employment rates to economy",
-                                    ),
-                                    # summary
-                                    dbc.AccordionItem(
-                                        [
-                                            html.Div(
-                                                [],
-                                                style={
-                                                    "backgroundColor": "#e6eef4",
-                                                    "padding": "40px 60px",
-                                                    "borderRadius": "16px",
-                                                    "margin": "30px auto",
-                                                    "boxShadow": "0 4px 10px rgba(0, 0, 0, 0.1)",
-                                                    "maxWidth": "1400px"
-                                                },
-                                            ),
-                                        ],
-                                        title="Summary of the effects",
-                                    ),
-                                ],
-                                always_open=True,
-                                start_collapsed=True,
-                            )
-                        ],
-                        title=html.H4(
-                            "Effects of education and employment rates on economy",
+                # Section 2: Correlations & Effects
+                html.Div(
+                    [
+                        html.H3(
+                            "📈 Correlations Between Sectors",
                             style={
-                                "display": "flex",
-                                "justifyContent": "center",
-                                "alignItems": "center",
-                                "fontWeight": "600",
-                                "fontSize": "1.6rem",
-                                "width": "100%",
+                                "textAlign": "center",
                                 "color": "#2c3e50",
-                                "margin": "0 auto"
+                                "marginBottom": "25px",
+                                "fontWeight": "600",
                             },
                         ),
-
-                    ),
-                ],
-                always_open=True,
-                start_collapsed=True,
-                className="my-4 w-100",
-            ),
-            style={
-                "maxWidth": "1400px",
-                "margin": "0 auto",
-                "borderRadius": "12px",
-                "boxShadow": "0 4px 10px rgba(0,0,0,0.1)",
-            },
+                        dbc.Tabs(
+                            [
+                                dbc.Tab(
+                                    html.Div([employment_education_corr], style={"padding": "25px"}),
+                                    label="Education ↔ Employment",
+                                ),
+                                dbc.Tab(
+                                    html.Div([economy_education_corr], style={"padding": "25px"}),
+                                    label="Education → Economy",
+                                ),
+                                dbc.Tab(
+                                    html.Div([economy_employment_corr], style={"padding": "25px"}),
+                                    label="Employment → Economy",
+                                ),
+                            ],
+                            id="tabs-correlations",
+                            active_tab="tab-0",
+                            className="mb-3",
+                        ),
+                    ],
+                    style={
+                        "backgroundColor": "#f2f5f9",
+                        "padding": "40px 60px",
+                        "borderRadius": "18px",
+                        "margin": "20px auto",
+                        "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.1)",
+                        "maxWidth": "1200px",
+                    },
+                ),
+            ]
         ),
 
         # Footer
         html.Footer(
             "© 2025 EU Sustainability Goals",
             className="text-center text-muted py-3",
-            style={"marginTop": "40px"}
+            style={"marginTop": "50px"},
         ),
     ],
-    style={"scrollBehavior": "smooth", "backgroundColor": "#f8f9fa"},
+    style={
+        "scrollBehavior": "smooth",
+        "backgroundColor": "#f8f9fa",
+        "fontFamily": "Inter, sans-serif",
+    },
 )
 
 
