@@ -128,6 +128,19 @@ def economy_education_correlation(app, early_childhood_df, tertiary_df, adult_df
         fig_inv.update_traces(marker=dict(size=10, opacity=0.8), textposition="top center")
         fig_inv.update_layout(height=550, hovermode="closest")
 
+        # Compute correlation values
+        corr_gdp = df_GDP_corr["GDP_rate"].corr(df_GDP_corr["edu_rate"])
+        corr_inv = df_inv_corr["inv_rate"].corr(df_inv_corr["edu_rate"])
+
+        # Update titles to show R²
+        fig_gdp.update_layout(
+            title=f"{selected_edu} vs GDP ({selected_year})<br><sup>Correlation: R² = {corr_gdp**2:.2f}</sup>"
+        )
+        fig_inv.update_layout(
+            title=f"{selected_edu} vs GDP investment rate ({selected_year})<br><sup>Correlation: R² = {corr_inv**2:.2f}</sup>"
+        )
+
+
         return fig_gdp, fig_inv
 
     return layout

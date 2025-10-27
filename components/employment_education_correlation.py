@@ -73,6 +73,7 @@ def employment_education_correlation(app, early_childhood_df, tertiary_df, adult
             #dcc.Graph(id="employment-education-corr", style={"flex": "1", "minWidth": "400px"}),
             dcc.Graph(id="unemployment-education-corr", style={"flex": "1", "minWidth": "400px"}),
         ], style={"display": "flex", "gap": "2%", "flexWrap": "wrap"})
+
     ])
 
     # Callback for both graphs
@@ -110,11 +111,17 @@ def employment_education_correlation(app, early_childhood_df, tertiary_df, adult
             text="country",
             color="country",
             color_discrete_map=country_colors,
+            trendline="ols",  # <— Adds a best-fit line
+            trendline_color_override="black",  # Makes line distinct
             title=f"{selected_edu} vs Employment Rate ({selected_year})",
             labels={"emp_rate": "Employment rate (%)", "edu_rate": f"{selected_edu} participation rate (%)"},
         )
+
         fig_emp.update_traces(marker=dict(size=10, opacity=0.8), textposition="top center")
         fig_emp.update_layout(height=550, hovermode="closest")
+
+        if len(fig_emp.data) > 1:
+            fig_emp.data[-1].update(line=dict(width=3, color="black"))
 
         # Scatter 2: Long-term unemployment rate vs Education
         fig_unemp = px.scatter(
@@ -124,11 +131,29 @@ def employment_education_correlation(app, early_childhood_df, tertiary_df, adult
             text="country",
             color="country",
             color_discrete_map=country_colors,
+            trendline="ols",
+            trendline_color_override="black",
             title=f"{selected_edu} vs Long-term Unemployment Rate ({selected_year})",
             labels={"unemp_rate": "Long-term unemployment rate (%)", "edu_rate": f"{selected_edu} participation rate (%)"},
         )
+
         fig_unemp.update_traces(marker=dict(size=10, opacity=0.8), textposition="top center")
         fig_unemp.update_layout(height=550, hovermode="closest")
+
+        if len(fig_unemp.data) > 1:
+            fig_unemp.data[-1].update(line=dict(width=3, color="black"))
+
+        corr_emp = df_emp_corr["emp_rate"].corr(df_emp_corr["edu_rate"]) ** 2
+        corr_unemp = df_unemp_corr["unemp_rate"].corr(df_unemp_corr["edu_rate"]) ** 2
+
+        fig_emp.update_layout(
+            title=f"{selected_edu} vs Employment Rate ({selected_year})<br><sup>Correlation: R^2 = {corr_emp:.2f}</sup>"
+        )
+
+        fig_unemp.update_layout(
+            title=f"{selected_edu} vs Long-term Unemployment Rate ({selected_year})<br><sup>Correlation: R^2 = {corr_unemp:.2f}</sup>"
+        )
+
 
         return fig_emp, fig_unemp
 
