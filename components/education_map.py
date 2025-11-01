@@ -12,7 +12,7 @@ def education_component(app, early_childhood_df, tertiary_df, adult_df):
         html.H2("Education in different ages", className="text-2xl font-bold text-center mb-4"),
         html.H3("Partipication in early childhood education measures the share of the children between the age of three and the starting age of compulsory primary education who participated in early childhood education and care. " \
         "Persons aged 25-34 with tertiary educational attainment level measures the share of the population aged 25-34 who have successfully completed tertiary studies. " \
-        "Adult participation in learning measures the share of people aged 25 to 64 who stated that they received formal or non-formal education and training in the four weeks preceding the survey",
+        "Adult participation in learning measures the share of people aged 25 to 64 who stated that they received formal or non-formal education and training in the four weeks preceding the survey.",
             style={
             "fontSize": "15px",
             "fontWeight": "400",
@@ -23,6 +23,15 @@ def education_component(app, early_childhood_df, tertiary_df, adult_df):
             "maxWidth": "800px",  
             "lineHeight": "1.6"  
         }),
+        html.P(
+            "Source text adapted from © European Union, Eurostat (https://ec.europa.eu/eurostat).",
+            style={
+                "fontSize": "12px",
+                "color": "#9CA3AF",
+                "textAlign": "center",
+                "marginBottom": "20px",
+            },
+        ),
         
         dcc.Dropdown(
             id="education-year-dropdown",
@@ -67,7 +76,7 @@ def education_component(app, early_childhood_df, tertiary_df, adult_df):
             color="value",
             scope="europe",
             color_continuous_scale="Viridis",
-            title=f"Participation in early childhood education (%)"
+            title=f"Early childhood education (%)"
         )
         fig_childhood.update_geos(fitbounds="locations")
         fig_childhood.update_layout(
@@ -85,7 +94,7 @@ def education_component(app, early_childhood_df, tertiary_df, adult_df):
             color="value",
             scope="europe",
             color_continuous_scale="Plasma",
-            title=f"Persons aged 25-34 with tertiary education (%)"
+            title=f"Tertiary education (%)"
         )
         fig_tertiary.update_geos(fitbounds="locations")
         fig_tertiary.update_layout(
@@ -103,7 +112,7 @@ def education_component(app, early_childhood_df, tertiary_df, adult_df):
             color="value",
             scope="europe",
             color_continuous_scale="Plasma",
-            title=f"Adult participation in learning (%)"
+            title=f"Adult education (%)"
         )
         fig_adulthood.update_geos(fitbounds="locations")
         fig_adulthood.update_layout(

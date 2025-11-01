@@ -28,6 +28,15 @@ def register_gdp_component(app, real_df, investment_df):
             "maxWidth": "800px",  
             "lineHeight": "1.6"  
         }),
+        html.P(
+        "Source text adapted from © European Union, Eurostat (https://ec.europa.eu/eurostat).",
+            style={
+                "fontSize": "12px",
+                "color": "#9CA3AF",
+                "textAlign": "center",
+                "marginBottom": "20px",
+            },
+        ),
         
         dcc.Dropdown(
             id="gdp-year-dropdown",
@@ -65,7 +74,7 @@ def register_gdp_component(app, real_df, investment_df):
             color="value",
             scope="europe",
             color_continuous_scale="Viridis",
-            title=f"Real GDP in euros (€) ({selected_year})"
+            title=f"Real GDP in euros (€)"
         )
         fig_real.update_geos(fitbounds="locations")
 
@@ -77,7 +86,7 @@ def register_gdp_component(app, real_df, investment_df):
             color="value",
             scope="europe",
             color_continuous_scale="Plasma",
-            title=f"Investment share of GDP in percentages (%)({selected_year})"
+            title=f"Investment share of GDP in percentages (%)"
         )
         fig_invest.update_geos(fitbounds="locations")
 

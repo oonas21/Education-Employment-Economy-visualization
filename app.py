@@ -207,10 +207,23 @@ app.layout = html.Div(
 
         # Footer
         html.Footer(
-            "© 2025 EU Sustainability Goals",
+            [
+                html.Div("© 2025 EU Sustainability Goals Dashboard", 
+                        style={"marginBottom": "4px"}),
+                html.Div([
+                    "Data source: © European Union, Eurostat – ",
+                    html.A("https://ec.europa.eu/eurostat", 
+                        href="https://ec.europa.eu/eurostat", 
+                        target="_blank", 
+                        style={"color": "#6c757d", "textDecoration": "none"})
+                ], style={"fontSize": "13px", "color": "#6c757d"}),
+                html.Div("Data retrieved from Eurostat’s public datasets, processed and visualized by the author.",
+                        style={"fontSize": "12px", "color": "#adb5bd", "marginTop": "4px"})
+            ],
             className="text-center text-muted py-3",
             style={"marginTop": "50px"},
         ),
+
     ],
     style={
         "scrollBehavior": "smooth",

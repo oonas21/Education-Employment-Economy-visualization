@@ -22,6 +22,15 @@ def employment_map_component(app, emp_rate_df, long_term_unemp_df):
             "maxWidth": "800px",  
             "lineHeight": "1.6"  
         }),
+        html.P(
+            "Source text adapted from © European Union, Eurostat (https://ec.europa.eu/eurostat).",
+            style={
+                "fontSize": "12px",
+                "color": "#9CA3AF",
+                "textAlign": "center",
+                "marginBottom": "20px",
+            },
+        ),
         
         dcc.Dropdown(
             id="employment-year-dropdown",

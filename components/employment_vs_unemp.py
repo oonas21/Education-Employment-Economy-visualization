@@ -102,7 +102,7 @@ def employ_vs_unemploy(app, emp_rate_df, long_term_unemp_df):
                 'value_unemp': 'Long-term unemployment rate (%)',
                 'country': 'Country'
             },
-            title=f"Employment vs. Long-term Unemployment ({selected_year})"
+            title=f"Employment vs. Long-term Unemployment"
         )
 
         # Default: all visible with normal colors
@@ -126,6 +126,10 @@ def employ_vs_unemploy(app, emp_rate_df, long_term_unemp_df):
         else:
             country_list = [html.Div("Select a region to see details.", style={"color": "#9CA3AF"})]
 
+        correlation = df["value_emp"].corr(df["value_unemp"]) ** 2
+        fig.update_layout(
+            title=f"<br><sup>Correlation: R² = {correlation:.2f}</sup>"
+        )
         # Layout tweaks
         fig.update_layout(
             xaxis=dict(range=[df['value_emp'].min() - 2, df['value_emp'].max() + 2]),

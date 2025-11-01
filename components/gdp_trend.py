@@ -29,7 +29,7 @@ def gdp_trend_component(app, real_df, investment_df):
             "lineHeight": "1.6",          # balanced vertical spacing
             "maxWidth": "800px",          # keeps it readable
         }),
-        html.H4("Comare GDP trends between different countries",
+        html.H4("Compare GDP trends across countries.",
             style={
             "fontSize": "15px",
             "fontWeight": "400",

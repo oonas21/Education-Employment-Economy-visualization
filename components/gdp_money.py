@@ -32,7 +32,7 @@ def gdp_money_component(app, real_df, investment_df):
             }),
         html.H4(
             "Compare real GDP (adjusted for inflation) and investment share across countries. "
-            "Each money icon represents one thousand GDP units. Brightened icons show the share of investment.",
+            "Each money icon represents one thousand euros. Brightened icons show the share of investment.",
             style={
                 "fontSize": "15px",
                 "fontWeight": "400",

@@ -75,7 +75,7 @@ def employment_trend_component(app, emp_rate_df, long_term_unemp_df):
             y="value",
             color="country",
             markers=True,
-            title="Employment rate trend",
+            title="Employment rate",
             labels={"value": "Employment rate (%)", "year": "Year", "country": "Country"},
             color_discrete_map=country_colors
         )
@@ -89,7 +89,7 @@ def employment_trend_component(app, emp_rate_df, long_term_unemp_df):
             y="value",
             color="country",
             markers=True,
-            title="Long-term unemployment rate trend",
+            title="Long-term unemployment rate",
             labels={"value": "Long-term unemployment rate (%)", "year": "Year", "country": "Country"},
             color_discrete_map=country_colors
         )

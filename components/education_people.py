@@ -44,7 +44,7 @@ def education_people_component(app, early_childhood_df, tertiary_df, adult_df):
                 "maxWidth": "800px",
             }),
 
-        html.H4("Compare education distributions by year and country",
+        html.H4("Compare education distributions between two selected countries for a chosen year.",
             style={
                 "fontSize": "15px",
                 "fontWeight": "400",

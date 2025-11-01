@@ -36,6 +36,19 @@ def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
             "maxWidth": "800px",          # keeps it readable
         }),
 
+        html.H4("Compare education trends of a country to mean education trends across Europe.",
+            style={
+            "fontSize": "15px",
+            "fontWeight": "400",
+            "textAlign": "center",
+            "margin": "0 auto 1rem auto",
+            "marginBottom": "1rem",
+            "color": "#4B5563",
+            "maxWidth": "800px",  
+            "lineHeight": "1.6"  
+        }),
+
+
         # Single dropdown for both graphs
         dcc.Dropdown(
             id="education-country-dropdown",
@@ -98,8 +111,7 @@ def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
             x="year",
             y="value",
             color="indicator",
-            title="Education Indicators Over Time",
-            labels={"value": "Percentage (%)", "year": "Year"},
+            labels={"value": "Percentage (%)"},
             color_discrete_map=color_map
         )
 
