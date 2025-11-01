@@ -56,15 +56,14 @@ def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
         Output("education-trend", "figure"),
         Input("education-country-dropdown", "value")
     )
-    def update_gdp_trends(selected_countries):
+    def update_edu_trends(selected_countries):
         if not selected_countries:
             return {}
 
-        # Ensure it’s a list
         if isinstance(selected_countries, str):
             selected_countries = [selected_countries]
 
-        # Filter real GDP
+        # Filter by country
         df_childhood = early_childhood_df[early_childhood_df['country'].isin(selected_countries)].sort_values("year")
         df_ter = tertiary_df[tertiary_df['country'].isin(selected_countries)].sort_values("year")
         df_adul = adult_df[adult_df['country'].isin(selected_countries)].sort_values("year")
@@ -74,6 +73,7 @@ def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
         df_adul["indicator"] = "Adult learning"
         df_all = pd.concat([df_childhood, df_ter, df_adul])
 
+        # --- Mean lines ---
         mean_childhood = early_childhood_df.groupby("year")["value"].mean().reset_index()
         mean_childhood["indicator"] = "Mean - Early childhood"
 
@@ -85,34 +85,43 @@ def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
 
         means_df = pd.concat([mean_childhood, mean_ter, mean_adul])
 
+        # Color map for both solid and dashed lines
+        color_map = {
+            "Early childhood": "#1f77b4",
+            "Tertiary": "#ff7f0e",
+            "Adult learning": "#2ca02c"
+        }
+
+        # --- Main trend lines ---
         fig_edu = px.line(
             df_all,
             x="year",
             y="value",
             color="indicator",
-            markers=True,
             title="Education Indicators Over Time",
-            labels={"value": "Percentage (%)", "year": "Year", "country": "Country"},
-            category_orders={"indicator": ["Early childhood", "Tertiary", "Adult learning"]} ,
-            color_discrete_map={
-                "Early childhood": "#1f77b4",
-                "Tertiary": "#ff7f0e",
-                "Adult learning": "#2ca02c"
-            }
+            labels={"value": "Percentage (%)", "year": "Year"},
+            color_discrete_map=color_map
         )
 
         # --- Add dashed mean lines manually ---
         for ind, df_mean in means_df.groupby("indicator"):
+            if "Early childhood" in ind:
+                color = color_map["Early childhood"]
+            elif "Tertiary" in ind:
+                color = color_map["Tertiary"]
+            else:
+                color = color_map["Adult learning"]
+
             fig_edu.add_scatter(
                 x=df_mean["year"],
                 y=df_mean["value"],
                 mode="lines",
                 name=ind,
-                line=dict(dash="dash", width=3),
+                line=dict(dash="dash", width=3, color=color),
                 hoverinfo="skip"
             )
 
-        # --- Force legend order ---
+        # --- Order legend and layout ---
         desired_order = [
             "Early childhood",
             "Mean - Early childhood",
@@ -121,9 +130,7 @@ def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
             "Adult learning",
             "Mean - Adult learning"
         ]
-
-        # Update legend rank based on desired order
-        for i, trace in enumerate(fig_edu.data):
+        for trace in fig_edu.data:
             if trace.name in desired_order:
                 trace.legendrank = desired_order.index(trace.name)
 
@@ -133,7 +140,6 @@ def education_trend_component(app, early_childhood_df, tertiary_df, adult_df):
             legend_title_text="Indicator",
             title_x=0.5
         )
-
 
         return fig_edu
 

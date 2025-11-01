@@ -114,7 +114,7 @@ app.layout = html.Div(
                 html.Div(
                     [
                         html.H3(
-                            "📊 Basic Indicators",
+                            "Basic Indicators",
                             style={
                                 "textAlign": "center",
                                 "color": "#2c3e50",
@@ -129,21 +129,21 @@ app.layout = html.Div(
                                         [gdp_component, gdp_trend_component, gdp_money_component],
                                         style={"padding": "25px"},
                                     ),
-                                    label="💶 GDP",
+                                    label="GDP",
                                 ),
                                 dbc.Tab(
                                     html.Div(
                                         [education_component, education_trend_component, education_people_component],
                                         style={"padding": "25px"},
                                     ),
-                                    label="🎓 Education",
+                                    label="Education",
                                 ),
                                 dbc.Tab(
                                     html.Div(
                                         [employment_map_component, employment_trend_component, employ_vs_unemploy_component],
                                         style={"padding": "25px"},
                                     ),
-                                    label="💼 Employment",
+                                    label="Employment",
                                 ),
                             ],
                             id="tabs-basic",
@@ -165,7 +165,7 @@ app.layout = html.Div(
                 html.Div(
                     [
                         html.H3(
-                            "📈 Correlations Between Sectors",
+                            "Correlations Between Sectors",
                             style={
                                 "textAlign": "center",
                                 "color": "#2c3e50",

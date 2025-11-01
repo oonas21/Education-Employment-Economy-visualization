@@ -1,21 +1,12 @@
 from dash import html, dcc
 from dash.dependencies import Input, Output
-
-import random
-
-def get_emoji(education_type):
-    if education_type == "Early childhood education":
-        return random.choice(["🧒", "👧"])  # boy or girl
-    elif education_type == "Adult education":
-        return random.choice(["🧑‍🏫", "👩‍🏫"])  # male or female teacher
-    elif education_type == "Tertiary education":
-        return "🎓"  # same for all
-    else:
-        return "📘"  # fallback
+import plotly.express as px
+import pandas as pd
 
 
 def education_people_component(app, early_childhood_df, tertiary_df, adult_df):
 
+    # --- Data setup ---
     years = sorted(
         list(
             set(early_childhood_df['year'].unique())
@@ -41,8 +32,9 @@ def education_people_component(app, early_childhood_df, tertiary_df, adult_df):
         )
     )
 
+    # --- Layout ---
     layout = html.Div([
-        html.H3("Education Comparison", 
+        html.H3("Education Level Comparison Between Countries",
             style={
                 "fontWeight": "400",
                 "textAlign": "center",
@@ -52,7 +44,7 @@ def education_people_component(app, early_childhood_df, tertiary_df, adult_df):
                 "maxWidth": "800px",
             }),
 
-        html.H4("Compare number of people with different education levels (each person = 5%)",
+        html.H4("Compare education distributions by year and country",
             style={
                 "fontSize": "15px",
                 "fontWeight": "400",
@@ -61,14 +53,6 @@ def education_people_component(app, early_childhood_df, tertiary_df, adult_df):
                 "color": "#4B5563",
                 "maxWidth": "800px",
                 "lineHeight": "1.6"
-            }),
-
-        html.Div("👧 🧒 Early childhood  🎓 Tertiary 👩‍🏫 🧑‍🏫 Adult education",
-            style={
-                "textAlign": "center",
-                "fontSize": "18px",
-                "marginBottom": "1rem",
-                "color": "#374151"
             }),
 
         html.Div([
@@ -104,72 +88,81 @@ def education_people_component(app, early_childhood_df, tertiary_df, adult_df):
         ]),
 
         html.Div([
-            html.Div(id="edu-country-a-visual", className="edu-box"),
-            html.Div(id="edu-country-b-visual", className="edu-box")
+            dcc.Graph(id="edu-country-a-graph", style={"width": "45%"}),
+            dcc.Graph(id="edu-country-b-graph", style={"width": "45%"})
         ], style={"display": "flex", "justifyContent": "space-around", "gap": "5%", "marginTop": "30px"}),
 
     ], className="my-8")
 
-    # ---- CALLBACK ----
+    # --- Callback ---
     @app.callback(
-        Output("edu-country-a-visual", "children"),
-        Output("edu-country-b-visual", "children"),
+        Output("edu-country-a-graph", "figure"),
+        Output("edu-country-b-graph", "figure"),
         Input("edu-year-dropdown", "value"),
         Input("edu-country-a-dropdown", "value"),
         Input("edu-country-b-dropdown", "value")
     )
-    def update_visuals(selected_year, country_a, country_b):
+    def update_graphs(selected_year, country_a, country_b):
         if not selected_year or not country_a or not country_b:
-            return html.Div(), html.Div()
+            return {}, {}
 
-        def num_icons(percentage):
-            return min(20, max(0, round(percentage / 5)))  # 1 icon = 5%
-
-        visuals = []
-        for country in [country_a, country_b]:
-            rows = []
-
-            datasets = [
+        def build_country_df(country):
+            data = []
+            for label, df in [
                 ("Early childhood education", early_childhood_df),
                 ("Tertiary education", tertiary_df),
                 ("Adult education", adult_df)
-            ]
+            ]:
+                row = df[(df["country"] == country) & (df["year"] == selected_year)]
+                if not row.empty:
+                    value = float(row.iloc[0]["value"])
+                    data.append({"Education type": label, "Percentage": value})
+            return pd.DataFrame(data)
 
-            for title, df in datasets:
-                row = df[(df['country'] == country) & (df['year'] == selected_year)]
-                if row.empty:
-                    continue  # skip missing data
+        # Match exact labels used in your data
+        color_map = {
+            "Early childhood education": "#1f77b4",
+            "Tertiary education": "#ff7f0e",
+            "Adult education": "#2ca02c"
+        }
 
-                value = float(row.iloc[0]['value'])
-                count = num_icons(value)
-                icons = []
-
-                for _ in range(count):
-                    emoji = get_emoji(title)
-                    icons.append(
-                        html.Span(
-                            emoji,
-                            className="edu-person"
-                        )
-                    )
-
-                rows.append(
-                    html.Div([
-                        html.Div(title, className="edu-title"),
-                        html.Div(icons, className="edu-icon-row")
-                    ], className="edu-level-row")
+        def make_histogram(df, country_name):
+            if df.empty:
+                fig = px.bar(title=f"No data for {country_name} in {selected_year}")
+                fig.update_layout(
+                    xaxis_title=None, yaxis_title=None,
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(0,0,0,0)"
                 )
+                return fig
 
-            if not rows:
-                visuals.append(
-                    html.Div(
-                        "No data found for this country and year",
-                        className="edu-no-data"
-                    )
-                )
-            else:
-                visuals.append(html.Div(rows, className="edu-country-box"))
+            # Apply consistent color mapping
+            fig = px.bar(
+                df,
+                x="Education type",
+                y="Percentage",
+                title=f"{country_name} ({selected_year})",
+                color="Education type",
+                text_auto=".1f",
+                color_discrete_map=color_map
+            )
 
-        return visuals[0], visuals[1]
+            fig.update_layout(
+                showlegend=False,
+                yaxis_title="Percentage",
+                xaxis_title=None,
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)"
+            )
+            return fig
+
+        df_a = build_country_df(country_a)
+        df_b = build_country_df(country_b)
+
+        fig_a = make_histogram(df_a, country_a)
+        fig_b = make_histogram(df_b, country_b)
+
+        return fig_a, fig_b
+
 
     return layout
