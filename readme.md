@@ -1,4 +1,4 @@
-# Interactive visuali
+# Interactive visualization on Eurostat Sustainable Development Goals data
 
 # Run
 
