@@ -164,10 +164,10 @@ def economy_education_correlation(app, early_childhood_df, tertiary_df, adult_df
         corr_inv = df_inv_corr["inv_rate"].corr(df_inv_corr["edu_rate"]) ** 2
 
         fig_gdp.update_layout(
-            title=f"{selected_edu} vs GDP ({selected_year})<br><sup>Correlation: R² = {corr_gdp:.2f}</sup>"
+            title=f"{selected_edu} vs GDP ({selected_year})<br><sup>Coefficient of determination of all datapoints: R² = {corr_gdp:.2f}</sup>"
         )
         fig_inv.update_layout(
-            title=f"{selected_edu} vs Investment in GDP ({selected_year})<br><sup>Correlation: R² = {corr_inv:.2f}</sup>"
+            title=f"{selected_edu} vs Investment in GDP ({selected_year})<br><sup>Coefficient of determination of all datapoints: R² = {corr_inv:.2f}</sup>"
         )
 
         return fig_gdp, fig_inv, country_list

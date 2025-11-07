@@ -128,7 +128,7 @@ def employ_vs_unemploy(app, emp_rate_df, long_term_unemp_df):
 
         correlation = df["value_emp"].corr(df["value_unemp"]) ** 2
         fig.update_layout(
-            title=f"<br><sup>Correlation: R² = {correlation:.2f}</sup>"
+            title=f"<br><sup>Coefficient of determination of all datapoints: R² = {correlation:.2f}</sup>"
         )
         # Layout tweaks
         fig.update_layout(

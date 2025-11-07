@@ -165,10 +165,10 @@ def employment_education_correlation(app, early_childhood_df, tertiary_df, adult
         corr_emp = df_emp_corr["emp_rate"].corr(df_emp_corr["edu_rate"]) ** 2
         corr_unemp = df_unemp_corr["unemp_rate"].corr(df_unemp_corr["edu_rate"]) ** 2
         fig_emp.update_layout(
-            title=f"{selected_edu} vs Employment Rate ({selected_year})<br><sup>Correlation: R² = {corr_emp:.2f}</sup>"
+            title=f"{selected_edu} vs Employment Rate ({selected_year})<br><sup>Coefficient of determination of all datapoints: R² = {corr_emp:.2f}</sup>"
         )
         fig_unemp.update_layout(
-            title=f"{selected_edu} vs Long-term Unemployment Rate ({selected_year})<br><sup>Correlation: R² = {corr_unemp:.2f}</sup>"
+            title=f"{selected_edu} vs Long-term Unemployment Rate ({selected_year})<br><sup>Coefficient of determination of all datapoints: R² = {corr_unemp:.2f}</sup>"
         )
 
         return fig_emp, fig_unemp, country_list
