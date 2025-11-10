@@ -98,7 +98,7 @@ app.layout = html.Div(
         html.Div(
             home_component,
             style={
-                "backgroundColor": "#e5b3e5",
+                "backgroundColor": "#a6cbea",
                 "padding": "50px 70px",
                 "borderRadius": "18px",
                 "margin": "40px auto 20px auto",
