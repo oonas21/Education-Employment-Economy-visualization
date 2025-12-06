@@ -129,7 +129,7 @@ app.layout = html.Div(
                                         [gdp_component, gdp_trend_component, gdp_money_component],
                                         style={"padding": "25px"},
                                     ),
-                                    label="GDP",
+                                    label="Economy",
                                 ),
                                 dbc.Tab(
                                     html.Div(

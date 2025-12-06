@@ -1,5 +1,12 @@
 # Interactive visualization on Eurostat Sustainable Development Goals data
 
+# Required software
+- Python 3
+- dash
+- plotly
+- pandas
+- os
+
 # Run
 
 1. Download the files
